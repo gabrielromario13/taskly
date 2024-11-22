@@ -1,24 +1,22 @@
 using ApplicationCore.Data.Context;
+using ApplicationCore.Domain;
 using ApplicationCore.Domain.Models;
-using ApplicationCore.Features.Common;
 using Microsoft.EntityFrameworkCore;
 
 namespace ApplicationCore.Features.Users;
 
 public class UserService(ApplicationContext context) : IUserService
 {
-    private readonly DbSet<User> _dbSet = context.Set<User>();
-    
     public async Task<Response<long?>> Create(UserRequestModel request)
     {
         var user = UserAdapter.ToDomain(request);
         
         try
         {
-            await _dbSet.AddAsync(user);
+            await context.Users.AddAsync(user);
             await context.SaveChangesAsync();
         }
-        catch (Exception ex)
+        catch
         {
             return new Response<long?>(null, 500, "Não foi possível cadastrar usuário.");
         }
@@ -29,7 +27,7 @@ public class UserService(ApplicationContext context) : IUserService
     public async Task<Response<UserResponseModel>> GetById(long id)
     {
         var response = UserAdapter.FromDomain(
-            (await _dbSet
+            (await context.Users
                 .AsNoTracking()
                 .FirstOrDefaultAsync(x => x.Id == id))!);
         
@@ -39,7 +37,7 @@ public class UserService(ApplicationContext context) : IUserService
     }
     
     public async Task<Response<IEnumerable<UserResponseModel>>> GetAll() =>
-        new((await _dbSet
+        new((await context.Users
             .AsNoTracking()
             .ToListAsync()
         ).Select(UserAdapter.FromDomain));

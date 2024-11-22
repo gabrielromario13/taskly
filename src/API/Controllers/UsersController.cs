@@ -19,6 +19,19 @@ public class UsersController(IUserService userService) : ControllerBase
             ? BadRequest(result)
             : Ok(result);
     }
+    
+    [HttpPut]
+    public async Task<IActionResult> Update(UserRequestModel request)
+    {
+        if (!request.ConfirmPassword.Equals(request.Password))
+            return BadRequest(new { code = 400, message = "As senhas precisam ser iguais." });
+
+        var result = await userService.Create(request);
+
+        return result is null
+            ? BadRequest(result)
+            : Ok(result);
+    }
 
     [HttpGet("{id:long}")]
     public async Task<IActionResult> GetById(long id)

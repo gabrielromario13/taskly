@@ -18,7 +18,7 @@ public class ProjectsController(IProjectService projectService) : ControllerBase
     }
     
     [HttpPost("{projectId:long}/users/{userId:long}")]
-    public async Task<IActionResult> BindUser(long projectId, long userId)
+    public async Task<IActionResult> BindUserToProject(long projectId, long userId)
     {
         var result = await projectService.BindUserToProject(projectId, userId);
         

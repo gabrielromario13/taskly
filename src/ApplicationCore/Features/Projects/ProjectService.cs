@@ -1,6 +1,6 @@
 using ApplicationCore.Data.Context;
+using ApplicationCore.Domain;
 using ApplicationCore.Domain.Models;
-using ApplicationCore.Features.Common;
 using Microsoft.EntityFrameworkCore;
 
 namespace ApplicationCore.Features.Projects;

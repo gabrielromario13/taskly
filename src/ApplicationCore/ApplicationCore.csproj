@@ -8,9 +8,6 @@
 
     <ItemGroup>
       <Folder Include="Data\" />
-      <Folder Include="Domain\" />
-      <Folder Include="Requests\" />
-      <Folder Include="Responses\" />
     </ItemGroup>
 
     <ItemGroup>

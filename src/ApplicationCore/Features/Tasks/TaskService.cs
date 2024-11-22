@@ -1,21 +1,18 @@
 using ApplicationCore.Data.Context;
-using ApplicationCore.Features.Common;
+using ApplicationCore.Domain;
 using Microsoft.EntityFrameworkCore;
-using Task = ApplicationCore.Domain.Models.Task;
 
 namespace ApplicationCore.Features.Tasks;
 
 public class TaskService(ApplicationContext context) : ITaskService
 {
-    private readonly DbSet<Task> _dbSet = context.Set<Task>();
-    
     public async Task<Response<long?>> Create(TaskRequestModel request)
     {
         var task = TaskAdapter.ToDomain(request);
         
         try
         {
-            await _dbSet.AddAsync(task);
+            await context.Tasks.AddAsync(task);
             await context.SaveChangesAsync();
         }
         catch
@@ -29,7 +26,7 @@ public class TaskService(ApplicationContext context) : ITaskService
     public async Task<Response<TaskResponseModel>> GetById(long id)
     {
         var response = TaskAdapter.FromDomain(
-            (await _dbSet
+            (await context.Tasks
                 .AsNoTracking()
                 .FirstOrDefaultAsync(x => x.Id == id))!);
         

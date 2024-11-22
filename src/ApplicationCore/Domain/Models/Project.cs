@@ -1,4 +1,5 @@
 ﻿using ApplicationCore.Domain.Enums;
+using ApplicationCore.Features.Projects;
 
 namespace ApplicationCore.Domain.Models;
 
@@ -21,4 +22,15 @@ public class Project(
 
     public virtual ICollection<UserProject> ProjectUsers { get; set; } = [];
     public virtual ICollection<Task> Tasks { get; set; } = [];
+
+    public void Update(ProjectRequestModel request)
+    {
+        Name = request.Name;
+        Description = request.Description;
+        StartDate = request.StartDate;
+        EndDate = request.EndDate;
+        Status = request.Status;
+        Priority = request.Priority;
+        OwnerId = request.UserId;
+    }
 }

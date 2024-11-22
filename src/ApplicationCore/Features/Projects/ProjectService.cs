@@ -29,6 +29,28 @@ public class ProjectService(ApplicationContext context) : IProjectService
         return new Response<long?>(project.Id);
     }
 
+    public async Task<Response<bool>> Update(long id, ProjectRequestModel request)
+    {
+        var project = await context.Projects.FindAsync(id);
+
+        if (project is null)
+            return new Response<bool>(false, 404, "Projeto não encontrado.");
+        
+        project.Update(request);
+        
+        try
+        {
+            context.Projects.Update(project);
+            await context.SaveChangesAsync();
+        }
+        catch
+        {
+            return new Response<bool>(false, 500, "Não foi possível atualizar projeto.");
+        }
+        
+        return new Response<bool>(true);
+    }
+
     public async Task<Response<long?>> BindUserToProject(long projectId, long userId)
     {
         if (!await context.Projects.AsNoTracking().AnyAsync(x => x.Id == projectId))

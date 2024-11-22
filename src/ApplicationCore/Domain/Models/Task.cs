@@ -13,6 +13,8 @@ public class Task(string title, string description, Priorities priority, Status 
     public long? UserId { get; private set; } = userId == 0 ? null : userId;
     public long ProjectId { get; private set; } = projectId;
 
+    public virtual ICollection<TaskComment> TaskComments { get; set; } = [];
+
     public void Update(TaskRequestModel request)
     {
         Title = request.Title;

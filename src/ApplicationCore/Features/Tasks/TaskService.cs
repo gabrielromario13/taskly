@@ -50,6 +50,7 @@ public class TaskService(ApplicationContext context) : ITaskService
         var response = TaskAdapter.FromDomain(
             (await context.Tasks
                 .AsNoTracking()
+                .Include(x => x.TaskComments)
                 .FirstOrDefaultAsync(x => x.Id == id))!);
         
         return response is null

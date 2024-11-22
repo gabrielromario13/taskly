@@ -20,6 +20,16 @@ public class TasksController(ITaskService taskService) : ControllerBase
             : Created($"{Request.Path}/{result.Data}", string.Empty);
     }
     
+    [HttpPatch("{id:long}")]
+    public async Task<IActionResult> Update(long id, TaskRequestModel request)
+    {
+        var result = await taskService.Update(id, request);
+
+        return result.Data is false
+            ? BadRequest(result)
+            : NoContent();
+    }
+    
     [HttpGet("{id:long}")]
     public async Task<IActionResult> GetById(long id)
     {

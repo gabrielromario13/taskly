@@ -22,6 +22,7 @@ public static class TaskAdapter
             Description = task.Description,
             Priority = task.Priority.ToString(),
             Status = task.Status.ToString(),
+            ProjectId = task.ProjectId,
             AssignedUserId = task.UserId
         };
 }

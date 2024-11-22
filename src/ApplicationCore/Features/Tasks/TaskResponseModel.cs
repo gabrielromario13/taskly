@@ -10,5 +10,6 @@ public class TaskResponseModel
     public string Description { get; set; } = string.Empty;
     public string Priority { get; set; } = string.Empty;
     public string Status { get; set; } = string.Empty;
+    public long ProjectId { get; set; }
     public long? AssignedUserId { get; set; } = null!;
 }

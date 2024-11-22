@@ -40,7 +40,7 @@ public class UserService(ApplicationContext context) : IUserService
         }
         catch
         {
-            return new Response<bool>(false, 500, "Não foi possível cadastrar usuário.");
+            return new Response<bool>(false, 500, "Não foi possível atualizar usuário.");
         }
         
         return new Response<bool>(true);

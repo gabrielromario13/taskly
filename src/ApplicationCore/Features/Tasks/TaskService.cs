@@ -23,6 +23,28 @@ public class TaskService(ApplicationContext context) : ITaskService
         return new Response<long?>(task.Id);
     }
 
+    public async Task<Response<bool>> Update(long id, TaskRequestModel request)
+    {
+        var task = await context.Tasks.FindAsync(id);
+
+        if (task is null)
+            return new Response<bool>(false, 404, "Usuário não encontrado.");
+        
+        task.Update(request);
+        
+        try
+        {
+            context.Tasks.Update(task);
+            await context.SaveChangesAsync();
+        }
+        catch
+        {
+            return new Response<bool>(false, 500, "Não foi possível atualizar tarefa.");
+        }
+        
+        return new Response<bool>(true);
+    }
+
     public async Task<Response<TaskResponseModel>> GetById(long id)
     {
         var response = TaskAdapter.FromDomain(

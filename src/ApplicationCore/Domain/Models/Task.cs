@@ -1,4 +1,5 @@
 ﻿using ApplicationCore.Domain.Enums;
+using ApplicationCore.Features.Tasks;
 
 namespace ApplicationCore.Domain.Models;
 
@@ -11,4 +12,14 @@ public class Task(string title, string description, Priorities priority, Status 
     public Status Status { get; private set; } = status;
     public long? UserId { get; private set; } = userId == 0 ? null : userId;
     public long ProjectId { get; private set; } = projectId;
+
+    public void Update(TaskRequestModel request)
+    {
+        Title = request.Title;
+        Description = request.Description;
+        Priority = request.Priority;
+        Status = request.Status;
+        UserId = request.UserId;
+        ProjectId = request.ProjectId;
+    }
 }

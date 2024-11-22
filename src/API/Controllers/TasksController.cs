@@ -9,6 +9,8 @@ namespace API.Controllers;
 public class TasksController(ITaskService taskService) : ControllerBase
 {
     [HttpPost]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status201Created)]
     public async Task<IActionResult> Create(TaskRequestModel request)
     {
         var result = await taskService.Create(request);

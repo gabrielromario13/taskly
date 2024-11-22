@@ -1,4 +1,5 @@
 using ApplicationCore.Domain.Models;
+using ApplicationCore.Utils;
 
 namespace ApplicationCore.Features.Users;
 
@@ -9,7 +10,7 @@ public static class UserAdapter
             request.Name,
             request.Username,
             request.Email,
-            request.Password,
+            HashUtils.HashPassword(request.Password),
             request.Role);
 
     public static UserResponseModel FromDomain(User user) =>

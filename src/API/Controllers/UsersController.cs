@@ -8,6 +8,8 @@ namespace API.Controllers;
 public class UsersController(IUserService userService) : ControllerBase
 {
     [HttpPost]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status201Created)]
     public async Task<IActionResult> Create(UserRequestModel request)
     {
         if (!request.ConfirmPassword.Equals(request.Password))

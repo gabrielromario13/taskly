@@ -8,6 +8,8 @@ namespace API.Controllers;
 public class ProjectsController(IProjectService projectService) : ControllerBase
 {
     [HttpPost]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status201Created)]
     public async Task<IActionResult> Create(ProjectRequestModel request)
     {
         var result = await projectService.Create(request);
@@ -18,16 +20,20 @@ public class ProjectsController(IProjectService projectService) : ControllerBase
     }
     
     [HttpPost("{projectId:long}/users/{userId:long}")]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status201Created)]
     public async Task<IActionResult> BindUserToProject(long projectId, long userId)
     {
         var result = await projectService.BindUserToProject(projectId, userId);
         
         return result.Data is null
-            ? NotFound(result)
+            ? BadRequest(result)
             : Created($"{Request.Path}", string.Empty);
     }
     
     [HttpGet("{id:long}")]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<IActionResult> GetById(long id)
     {
         var result = await projectService.GetById(id);

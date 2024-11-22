@@ -8,5 +8,5 @@ public class TaskResponseModel : TaskBaseModel
     public long Id { get; set; }
     public string Priority { get; set; } = string.Empty;
     public string Status { get; set; } = string.Empty;
-    public UserResponseModel? User { get; set; } = null!;
+    public long? AssignedUserId { get; set; } = null!;
 }

@@ -1,4 +1,4 @@
-using ApplicationCore.Responses;
+using ApplicationCore.Features.Common;
 
 namespace ApplicationCore.Features.Users;
 

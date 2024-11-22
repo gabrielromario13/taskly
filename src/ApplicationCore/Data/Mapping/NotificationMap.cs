@@ -15,6 +15,6 @@ public class NotificationMap : IEntityTypeConfiguration<Notification>
         builder.Property(e => e.Message).IsRequired().HasMaxLength(500);
         builder.Property(e => e.IsRead).IsRequired();
         builder.Property(u => u.CreatedAt).IsRequired();
-        builder.Property(u => u.UpdatedAt);
+        builder.Property(u => u.UpdatedAt).IsRequired(false);
     }
 }

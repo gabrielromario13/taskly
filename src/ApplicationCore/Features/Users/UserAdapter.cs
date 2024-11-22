@@ -1,5 +1,4 @@
 using ApplicationCore.Domain.Models;
-using ApplicationCore.Responses;
 
 namespace ApplicationCore.Features.Users;
 
@@ -11,8 +10,7 @@ public static class UserAdapter
             request.Username,
             request.Email,
             request.Password,
-            request.Role,
-            request.ProjectId == 0 ? null : request.ProjectId);
+            request.Role);
 
     public static UserResponseModel FromDomain(User user) =>
         new()
@@ -22,7 +20,6 @@ public static class UserAdapter
             Username = user.Username,
             Email = user.Email,
             Role = user.Role.ToString(),
-            LastLogin = user.LastLogin,
-            ProjectId = user.ProjectId
+            LastLogin = user.LastLogin
         };
 }

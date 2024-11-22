@@ -1,14 +1,19 @@
 using System.Text.Json.Serialization;
 
-namespace ApplicationCore.Responses;
+namespace ApplicationCore.Features.Common;
 
 public class Response<TData>
 {
     private readonly int _code = Configuration.DefaultStatusCode;
 
+    public TData? Data { get; protected set; }
+    public string? Message { get; protected set; }
+
+    [JsonIgnore]
+    public bool IsSuccess => _code is >= 200 and <= 299;
+    
     [JsonConstructor]
-    public Response()
-        => _code = Configuration.DefaultStatusCode;
+    public Response() => _code = Configuration.DefaultStatusCode;
     
     public Response(
         TData? data,
@@ -19,10 +24,4 @@ public class Response<TData>
         _code = code;
         Message = message;
     }
-
-    public TData? Data { get; protected set; }
-    public string? Message { get; protected set; }
-
-    [JsonIgnore]
-    public bool IsSuccess => _code is >= 200 and <= 299;
 }

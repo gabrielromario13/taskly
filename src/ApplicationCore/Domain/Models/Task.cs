@@ -11,6 +11,4 @@ public class Task(string title, string description, Priorities priority, Status 
     public Status Status { get; private set; } = status;
     public long? UserId { get; private set; } = userId;
     public long ProjectId { get; private set; } = projectId;
-
-    public virtual User? User { get; set; } = null!;
 }

@@ -1,5 +1,5 @@
 using ApplicationCore.Data.Context;
-using ApplicationCore.Responses;
+using ApplicationCore.Features.Common;
 using Microsoft.EntityFrameworkCore;
 using Task = ApplicationCore.Domain.Models.Task;
 
@@ -31,7 +31,6 @@ public class TaskService(ApplicationContext context) : ITaskService
         var response = TaskAdapter.FromDomain(
             (await _dbSet
                 .AsNoTracking()
-                .Include(x => x.User)
                 .FirstOrDefaultAsync(x => x.Id == id))!);
         
         return response is null

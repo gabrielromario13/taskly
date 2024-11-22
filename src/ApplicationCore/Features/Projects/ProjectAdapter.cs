@@ -27,6 +27,6 @@ public class ProjectAdapter
             Status = project.Status.ToString(),
             Priority = project.Priority.ToString(),
             Tasks = project.Tasks.Select(TaskAdapter.FromDomain),
-            Users = project.Users.Select(UserAdapter.FromDomain)
+            Users = project.ProjectUsers.Select(x => UserAdapter.FromDomain(x.User))
         };
 }

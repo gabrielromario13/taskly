@@ -13,9 +13,9 @@ public class TaskCommentMap : IEntityTypeConfiguration<TaskComment>
         builder.HasKey(u => u.Id);
         builder.Property(u => u.TaskId).IsRequired();
         builder.Property(u => u.UserId).IsRequired();
-        builder.Property(e => e.Content).IsRequired().HasMaxLength(1000);
+        builder.Property(e => e.Content).IsRequired().HasMaxLength(100);
         builder.Property(e => e.CreatedAt).IsRequired();
-        builder.Property(e => e.UpdatedAt);
+        builder.Property(e => e.UpdatedAt).IsRequired(false);
         
         builder
             .HasOne(c => c.User)

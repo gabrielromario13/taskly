@@ -1,7 +1,7 @@
 using ApplicationCore.Data.Context;
 using ApplicationCore.Domain.Models;
+using ApplicationCore.Features.Common;
 using Microsoft.EntityFrameworkCore;
-using ApplicationCore.Responses;
 
 namespace ApplicationCore.Features.Users;
 

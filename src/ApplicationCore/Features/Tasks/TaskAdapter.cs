@@ -22,6 +22,6 @@ public static class TaskAdapter
             Description = task.Description,
             Priority = task.Priority.ToString(),
             Status = task.Status.ToString(),
-            User = task?.User is null ? default : UserAdapter.FromDomain(task.User)
+            AssignedUserId = task.UserId
         };
 }

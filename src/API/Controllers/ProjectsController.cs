@@ -17,6 +17,16 @@ public class ProjectsController(IProjectService projectService) : ControllerBase
             : Ok(result);
     }
     
+    [HttpPost("{projectId:long}/users/{userId:long}")]
+    public async Task<IActionResult> BindUser(long projectId, long userId)
+    {
+        var result = await projectService.BindUserToProject(projectId, userId);
+        
+        return result is null
+            ? NotFound(result)
+            : Ok(result);
+    }
+    
     [HttpGet("{id:long}")]
     public async Task<IActionResult> GetById(long id)
     {

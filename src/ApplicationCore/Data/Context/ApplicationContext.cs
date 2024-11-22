@@ -1,6 +1,8 @@
 ﻿using System.Reflection;
+using ApplicationCore.Domain.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Task = ApplicationCore.Domain.Models.Task;
 
 namespace ApplicationCore.Data.Context;
 
@@ -33,4 +35,11 @@ public sealed class ApplicationContext : DbContext
     {
         modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
     }
+
+    public DbSet<Notification> Notifications { get; set; } = null!;
+    public DbSet<Project> Projects { get; set; } = null!;
+    public DbSet<Task> Tasks { get; set; } = null!;
+    public DbSet<TaskComment> TaskComments { get; set; } = null!;
+    public DbSet<User> Users { get; set; } = null!;
+    public DbSet<UserProject> UserProjects { get; set; } = null!;
 }

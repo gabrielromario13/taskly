@@ -23,6 +23,28 @@ public class UserService(ApplicationContext context) : IUserService
         
         return new Response<long?>(user.Id);
     }
+    
+    public async Task<Response<bool>> Update(long id, UpdateUserRequest request)
+    {
+        var user = await context.Users.FindAsync(id);
+
+        if (user is null)
+            return new Response<bool>(false, 404, "Usuário não encontrado.");
+        
+        user.Update(request);
+        
+        try
+        {
+            context.Users.Update(user);
+            await context.SaveChangesAsync();
+        }
+        catch
+        {
+            return new Response<bool>(false, 500, "Não foi possível cadastrar usuário.");
+        }
+        
+        return new Response<bool>(true);
+    }
 
     public async Task<Response<UserResponseModel>> GetById(long id)
     {

@@ -13,9 +13,9 @@ public class TasksController(ITaskService taskService) : ControllerBase
     {
         var result = await taskService.Create(request);
         
-        return result is null
+        return result.Data is null
             ? BadRequest(result)
-            : Ok(result);
+            : Created($"{Request.Path}/{result.Data}", string.Empty);
     }
     
     [HttpGet("{id:long}")]
@@ -23,7 +23,7 @@ public class TasksController(ITaskService taskService) : ControllerBase
     {
         var result = await taskService.GetById(id);
         
-        return result is null
+        return result.Data is null
             ? NotFound(result)
             : Ok(result);
     }

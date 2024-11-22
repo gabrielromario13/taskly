@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using ApplicationCore.Domain.Enums;
+using ApplicationCore.Features.Users;
 
 namespace ApplicationCore.Domain.Models;
 
@@ -15,7 +16,14 @@ public class User(string name, string username, string email, string password, R
 
     public virtual ICollection<UserProject> UserProjects { get; set; } = [];
 
-    public void Update()
+    public void Update(UpdateUserRequest request)
+    {
+        Name = request.Name;
+        Username = request.Username;
+        Role = request.Role;
+    }
+    
+    public void UpdateLastLogin()
     {
         LastLogin = DateTime.UtcNow;
     }

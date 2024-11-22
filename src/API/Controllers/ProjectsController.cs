@@ -12,9 +12,9 @@ public class ProjectsController(IProjectService projectService) : ControllerBase
     {
         var result = await projectService.Create(request);
         
-        return result is null
+        return result.Data is null
             ? BadRequest(result)
-            : Ok(result);
+            : Created($"{Request.Path}/{result.Data}", string.Empty);
     }
     
     [HttpPost("{projectId:long}/users/{userId:long}")]
@@ -22,9 +22,9 @@ public class ProjectsController(IProjectService projectService) : ControllerBase
     {
         var result = await projectService.BindUserToProject(projectId, userId);
         
-        return result is null
+        return result.Data is null
             ? NotFound(result)
-            : Ok(result);
+            : Created($"{Request.Path}", string.Empty);
     }
     
     [HttpGet("{id:long}")]
@@ -32,7 +32,7 @@ public class ProjectsController(IProjectService projectService) : ControllerBase
     {
         var result = await projectService.GetById(id);
         
-        return result is null
+        return result.Data is null
             ? NotFound(result)
             : Ok(result);
     }

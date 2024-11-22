@@ -15,22 +15,19 @@ public class UsersController(IUserService userService) : ControllerBase
 
         var result = await userService.Create(request);
 
-        return result is null
+        return result.Data is null
             ? BadRequest(result)
-            : Ok(result);
+            : Created($"{Request.Path}/{result.Data}", string.Empty);
     }
     
-    [HttpPut]
-    public async Task<IActionResult> Update(UserRequestModel request)
+    [HttpPatch("{id:long}")]
+    public async Task<IActionResult> Update(long id, UpdateUserRequest request)
     {
-        if (!request.ConfirmPassword.Equals(request.Password))
-            return BadRequest(new { code = 400, message = "As senhas precisam ser iguais." });
+        var result = await userService.Update(id, request);
 
-        var result = await userService.Create(request);
-
-        return result is null
+        return result.Data is false
             ? BadRequest(result)
-            : Ok(result);
+            : NoContent();
     }
 
     [HttpGet("{id:long}")]
@@ -38,7 +35,7 @@ public class UsersController(IUserService userService) : ControllerBase
     {
         var result = await userService.GetById(id);
 
-        return result is null
+        return result.Data is null
             ? NotFound(result)
             : Ok(result);
     }

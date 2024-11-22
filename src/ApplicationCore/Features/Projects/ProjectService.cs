@@ -9,12 +9,17 @@ public class ProjectService(ApplicationContext context) : IProjectService
 {
     public async Task<Response<long?>> Create(ProjectRequestModel request)
     {
+        if (!await context.Users.AnyAsync(x => x.Id == request.UserId))
+            return new Response<long?>(null, 404, "Usuário não encontrado.");
+        
         var project = ProjectAdapter.ToDomain(request);
 
         try
         {
             await context.Projects.AddAsync(project);
             await context.SaveChangesAsync();
+
+            await BindUserToProject(project.Id, request.UserId);
         }
         catch
         {
@@ -24,16 +29,16 @@ public class ProjectService(ApplicationContext context) : IProjectService
         return new Response<long?>(project.Id);
     }
 
-    public async Task<Response<(long, long)?>> BindUserToProject(long userId, long projectId)
+    public async Task<Response<long?>> BindUserToProject(long projectId, long userId)
     {
         if (!await context.Projects.AnyAsync(x => x.Id == projectId))
-            return new Response<(long, long)?>(null, 404, "Projeto não encontrado.");
+            return new Response<long?>(null, 404, "Projeto não encontrado.");
 
         if (!await context.Users.AnyAsync(x => x.Id == userId))
-            return new Response<(long, long)?>(null, 404, "Usuário não encontrado.");
+            return new Response<long?>(null, 404, "Usuário não encontrado.");
 
         if (await context.UserProjects.AnyAsync(u => u.UserId == userId && u.ProjectId == projectId))
-            return new Response<(long, long)?>(null, 404, "Usuário já está vinculado ao projeto.");
+            return new Response<long?>(null, 404, "Usuário já está vinculado ao projeto.");
 
         try
         {
@@ -42,10 +47,10 @@ public class ProjectService(ApplicationContext context) : IProjectService
         }
         catch (Exception ex)
         {
-            return new Response<(long, long)?>(null, 500, ex.Message);
+            return new Response<long?>(null, 500, ex.Message);
         }
 
-        return new Response<(long, long)?>((projectId, userId));
+        return new Response<long?>(userId);
     }
 
     public async Task<Response<ProjectResponseModel>> GetById(long id)
@@ -57,11 +62,8 @@ public class ProjectService(ApplicationContext context) : IProjectService
             .ThenInclude(x => x.User)
             .FirstOrDefaultAsync(x => x.Id == id);
 
-        if (project is null)
-            return new Response<ProjectResponseModel>(null, 404, "Projeto não encontrado.");
-
-        return project.Tasks.Count <= 0
-            ? new Response<ProjectResponseModel>(null, 404, "Nenhuma tarefa encontrada.")
+        return project is null
+            ? new Response<ProjectResponseModel>(null, 404, "Projeto não encontrado.")
             : new Response<ProjectResponseModel>(ProjectAdapter.FromDomain(project));
     }
 }

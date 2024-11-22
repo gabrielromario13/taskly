@@ -36,7 +36,6 @@ public sealed class ApplicationContext : DbContext
         modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
     }
 
-    public DbSet<Notification> Notifications { get; set; } = null!;
     public DbSet<Project> Projects { get; set; } = null!;
     public DbSet<Task> Tasks { get; set; } = null!;
     public DbSet<TaskComment> TaskComments { get; set; } = null!;

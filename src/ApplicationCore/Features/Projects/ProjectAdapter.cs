@@ -20,6 +20,7 @@ public class ProjectAdapter
         new()
         {
             Id = project.Id,
+            OwnerId = project.OwnerId,
             Name = project.Name,
             Description = project.Description,
             StartDate = project.StartDate,

@@ -4,35 +4,41 @@ using Microsoft.AspNetCore.Mvc;
 namespace API.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("api/[controller]")]
 public class ProjectsController(IProjectService projectService) : ControllerBase
 {
     [HttpPost]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status201Created)]
     public async Task<IActionResult> Create(ProjectRequestModel request)
     {
         var result = await projectService.Create(request);
         
-        return result is null
+        return result.Data is null
             ? BadRequest(result)
-            : Ok(result);
+            : Created($"{Request.Path}/{result.Data}", string.Empty);
     }
     
     [HttpPost("{projectId:long}/users/{userId:long}")]
-    public async Task<IActionResult> BindUser(long projectId, long userId)
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status201Created)]
+    public async Task<IActionResult> BindUserToProject(long projectId, long userId)
     {
         var result = await projectService.BindUserToProject(projectId, userId);
         
-        return result is null
-            ? NotFound(result)
-            : Ok(result);
+        return result.Data is null
+            ? BadRequest(result)
+            : Created($"{Request.Path}", string.Empty);
     }
     
     [HttpGet("{id:long}")]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<IActionResult> GetById(long id)
     {
         var result = await projectService.GetById(id);
         
-        return result is null
+        return result.Data is null
             ? NotFound(result)
             : Ok(result);
     }

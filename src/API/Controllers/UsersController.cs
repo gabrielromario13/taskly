@@ -4,10 +4,12 @@ using Microsoft.AspNetCore.Mvc;
 namespace API.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("api/[controller]")]
 public class UsersController(IUserService userService) : ControllerBase
 {
     [HttpPost]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status201Created)]
     public async Task<IActionResult> Create(UserRequestModel request)
     {
         if (!request.ConfirmPassword.Equals(request.Password))
@@ -15,9 +17,19 @@ public class UsersController(IUserService userService) : ControllerBase
 
         var result = await userService.Create(request);
 
-        return result is null
+        return result.Data is null
             ? BadRequest(result)
-            : Ok(result);
+            : Created($"{Request.Path}/{result.Data}", string.Empty);
+    }
+    
+    [HttpPatch("{id:long}")]
+    public async Task<IActionResult> Update(long id, UpdateUserRequest request)
+    {
+        var result = await userService.Update(id, request);
+
+        return result.Data is false
+            ? BadRequest(result)
+            : NoContent();
     }
 
     [HttpGet("{id:long}")]
@@ -25,7 +37,7 @@ public class UsersController(IUserService userService) : ControllerBase
     {
         var result = await userService.GetById(id);
 
-        return result is null
+        return result.Data is null
             ? NotFound(result)
             : Ok(result);
     }

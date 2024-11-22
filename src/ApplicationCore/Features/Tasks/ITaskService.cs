@@ -1,4 +1,4 @@
-using ApplicationCore.Features.Common;
+using ApplicationCore.Domain;
 
 namespace ApplicationCore.Features.Tasks;
 

@@ -1,6 +1,6 @@
 using System.Text.Json.Serialization;
 
-namespace ApplicationCore.Features.Common;
+namespace ApplicationCore.Domain;
 
 public class Response<TData>
 {

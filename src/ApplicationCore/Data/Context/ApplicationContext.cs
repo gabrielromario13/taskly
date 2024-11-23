@@ -8,10 +8,10 @@ namespace ApplicationCore.Data.Context;
 
 public sealed class ApplicationContext : DbContext
 {
-    public ApplicationContext(DbContextOptions<ApplicationContext> options, bool applyMigration = default)
+    public ApplicationContext(DbContextOptions<ApplicationContext> options)
         : base(options)
     {
-        if (Database.IsRelational() && applyMigration)
+        if (Database.IsRelational())
             Database.Migrate();
     }
     
@@ -31,10 +31,8 @@ public sealed class ApplicationContext : DbContext
         optionsBuilder.UseSqlServer(connectionString);
     }
     
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
-    {
+    protected override void OnModelCreating(ModelBuilder modelBuilder) =>
         modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
-    }
 
     public DbSet<Project> Projects { get; set; } = null!;
     public DbSet<Task> Tasks { get; set; } = null!;

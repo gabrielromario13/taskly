@@ -16,11 +16,5 @@ public class TaskCommentMap : IEntityTypeConfiguration<TaskComment>
         builder.Property(e => e.Content).IsRequired().HasMaxLength(100);
         builder.Property(e => e.CreatedAt).IsRequired();
         builder.Property(e => e.UpdatedAt).IsRequired(false);
-        
-        builder
-            .HasOne(c => c.User)
-            .WithMany()
-            .HasForeignKey(c => c.UserId)
-            .OnDelete(DeleteBehavior.Restrict);
     }
 }

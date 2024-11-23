@@ -1,4 +1,5 @@
 using ApplicationCore.Features.Projects;
+using ApplicationCore.Features.Tasks;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers;
@@ -17,6 +18,16 @@ public class ProjectsController(IProjectService projectService) : ControllerBase
         return result.Data is null
             ? BadRequest(result)
             : Created($"{Request.Path}/{result.Data}", string.Empty);
+    }
+    
+    [HttpPatch("{id:long}")]
+    public async Task<IActionResult> Update(long id, ProjectRequestModel request)
+    {
+        var result = await projectService.Update(id, request);
+
+        return result.Data is false
+            ? BadRequest(result)
+            : NoContent();
     }
     
     [HttpPost("{projectId:long}/users/{userId:long}")]

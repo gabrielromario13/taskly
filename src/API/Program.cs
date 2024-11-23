@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using ApplicationCore.Data.Context;
 using ApplicationCore.Features.Auths;
 using ApplicationCore.Features.Projects;
+using ApplicationCore.Features.TaskComments;
 using ApplicationCore.Features.Tasks;
 using ApplicationCore.Features.Users;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -23,6 +24,7 @@ builder.Services.AddDbContext<ApplicationContext>(x =>
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IProjectService, ProjectService>();
 builder.Services.AddScoped<ITaskService, TaskService>();
+builder.Services.AddScoped<ITaskCommentService, TaskCommentService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 
 var key = Encoding.ASCII.GetBytes(Configuration.Secret);

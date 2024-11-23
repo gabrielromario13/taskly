@@ -9,7 +9,7 @@ public class ProjectService(ApplicationContext context) : IProjectService
 {
     public async Task<Response<long?>> Create(ProjectRequestModel request)
     {
-        if (!await context.Users.AnyAsync(x => x.Id == request.UserId))
+        if (!await context.Users.AsNoTracking().AnyAsync(x => x.Id == request.UserId))
             return new Response<long?>(null, 404, "Usuário não encontrado.");
         
         var project = ProjectAdapter.ToDomain(request);
@@ -29,15 +29,37 @@ public class ProjectService(ApplicationContext context) : IProjectService
         return new Response<long?>(project.Id);
     }
 
+    public async Task<Response<bool>> Update(long id, ProjectRequestModel request)
+    {
+        var project = await context.Projects.FindAsync(id);
+
+        if (project is null)
+            return new Response<bool>(false, 404, "Projeto não encontrado.");
+        
+        project.Update(request);
+        
+        try
+        {
+            context.Projects.Update(project);
+            await context.SaveChangesAsync();
+        }
+        catch
+        {
+            return new Response<bool>(false, 500, "Não foi possível atualizar projeto.");
+        }
+        
+        return new Response<bool>(true);
+    }
+
     public async Task<Response<long?>> BindUserToProject(long projectId, long userId)
     {
-        if (!await context.Projects.AnyAsync(x => x.Id == projectId))
+        if (!await context.Projects.AsNoTracking().AnyAsync(x => x.Id == projectId))
             return new Response<long?>(null, 404, "Projeto não encontrado.");
 
-        if (!await context.Users.AnyAsync(x => x.Id == userId))
+        if (!await context.Users.AsNoTracking().AnyAsync(x => x.Id == userId))
             return new Response<long?>(null, 404, "Usuário não encontrado.");
 
-        if (await context.UserProjects.AnyAsync(u => u.UserId == userId && u.ProjectId == projectId))
+        if (await context.UserProjects.AsNoTracking().AnyAsync(u => u.UserId == userId && u.ProjectId == projectId))
             return new Response<long?>(null, 404, "Usuário já está vinculado ao projeto.");
 
         try

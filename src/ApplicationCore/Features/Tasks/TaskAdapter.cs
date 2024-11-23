@@ -1,3 +1,4 @@
+using ApplicationCore.Features.TaskComments;
 using ApplicationCore.Features.Users;
 using Task = ApplicationCore.Domain.Models.Task;
 
@@ -22,6 +23,8 @@ public static class TaskAdapter
             Description = task.Description,
             Priority = task.Priority.ToString(),
             Status = task.Status.ToString(),
-            AssignedUserId = task.UserId
+            ProjectId = task.ProjectId,
+            AssignedUserId = task.UserId,
+            TaskComments = task.TaskComments.Select(TaskCommentAdapter.FromDomain)
         };
 }
